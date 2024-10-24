@@ -1,7 +1,8 @@
 -- Database: meetuphub
 
+
 -- DROP DATABASE IF EXISTS meetuphub;
-CREATE TABLE users (
+CREATE TABLE user (
     id INTEGER NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -10,14 +11,14 @@ CREATE TABLE users (
     PRIMARY KEY(id)
 );
 
-CREATE TABLE categories (
+CREATE TABLE category (
     id INTEGER NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY,
     name VARCHAR(255) NOT NULL UNIQUE,
     description TEXT,
     PRIMARY KEY(id)
 );
 
-CREATE TABLE events (
+CREATE TABLE event (
     id INTEGER NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
@@ -28,15 +29,13 @@ CREATE TABLE events (
     organizer_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     PRIMARY KEY(id)
 );
-CREATE TABLE event_category_mapping (
-    id INTEGER NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY,
+CREATE TABLE event_category (
     event_id INTEGER NOT NULL REFERENCES events(id) ON DELETE CASCADE,
     category_id INTEGER NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
-    PRIMARY KEY(id),
-    UNIQUE (event_id, category_id)
+    PRIMARY KEY (event_id, category_id)
 );
 
-CREATE TABLE locations (
+CREATE TABLE location (
     id INTEGER NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY,
     name VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,
@@ -44,51 +43,42 @@ CREATE TABLE locations (
     PRIMARY KEY(id)
 );
 
-CREATE TABLE event_participants (
-    id INTEGER NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY,
+CREATE TABLE event_participant (
     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     event_id INTEGER NOT NULL REFERENCES events(id) ON DELETE CASCADE,
     registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR(255),
-    PRIMARY KEY(id),
-    UNIQUE (user_id, event_id)
+    PRIMARY KEY (user_id, event_id)
 );
 
-CREATE TABLE location_category_mapping (
-    id INTEGER NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY,
+CREATE TABLE location_category (
     location_id INTEGER NOT NULL REFERENCES locations(id) ON DELETE CASCADE,
     category_id INTEGER NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
-    PRIMARY KEY(id),
-    UNIQUE (location_id, category_id)
+    PRIMARY KEY (location_id, category_id)
 );
 
 
-CREATE TABLE tags (
+CREATE TABLE tag (
     id INTEGER NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY,
     tag_name TEXT NOT NULL UNIQUE,
     PRIMARY KEY(id)
 );
 
-CREATE TABLE event_tag_mapping (
-    id INTEGER NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY,
+CREATE TABLE event_tag (
     event_id INTEGER NOT NULL REFERENCES events(id) ON DELETE CASCADE,
     tag_id INTEGER NOT NULL REFERENCES tags(id) ON DELETE CASCADE,
-    PRIMARY KEY(id),
-    UNIQUE (event_id, tag_id)
+    PRIMARY KEY (event_id, tag_id)
 );
 
 
-
-CREATE TABLE roles (
+CREATE TABLE role (
     id INTEGER NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY,
     name VARCHAR(255) NOT NULL UNIQUE,
     PRIMARY KEY(id)
 );
 
 CREATE TABLE user_roles (
-    id INTEGER NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY,
     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     role_id INTEGER NOT NULL REFERENCES roles(id) ON DELETE CASCADE,
-    PRIMARY KEY(id),
-    UNIQUE (user_id, role_id)
+    PRIMARY KEY (user_id, role_id)
 );
