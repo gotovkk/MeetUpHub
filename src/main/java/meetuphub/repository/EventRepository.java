@@ -42,7 +42,7 @@ public interface EventRepository {
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Ошибка при получении данных пользователя.");
+            throw new DatabaseException("Ошибка при получении данных пользователя");
         }
 
         return events;
