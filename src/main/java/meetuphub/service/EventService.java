@@ -17,12 +17,18 @@ public class EventService {
             throw new IllegalArgumentException("Ивент не найден.");
         }
 
-        List<User> users = UserRepository.getUserData("SELECT * FROM user WHERE id = ? ", userId);
+        List<User> users = UserRepository.getUserData("SELECT * FROM \"user\" WHERE id = ? ", userId);
         if (users.isEmpty()) {
             throw new IllegalArgumentException("Пользователь не найден.");
         }
         EventUserRepository.addUserToEvent(eventId, userId);
     }
+
+    public List<Event> getAllEvents() {
+        return EventRepository.getAllEvents();
+    }
+
+
 }
 
 
