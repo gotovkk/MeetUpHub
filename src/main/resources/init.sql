@@ -2,8 +2,7 @@
 
 DROP TABLE IF EXISTS meetuphub;
 
-
-
+CREATE DATABASE meetuphub;
 CREATE TABLE "user"
 (
     id            INTEGER             NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY,
