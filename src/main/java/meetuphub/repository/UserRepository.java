@@ -15,7 +15,7 @@ import java.util.List;
 public interface UserRepository {
     String INSERT_USER = "INSERT INTO \"user\" (name, email, password_hash) VALUES (?, ?, ?);";
     String UPDATE_USER = "UPDATE \"user\" SET name = ? WHERE id = ?";
-    String DELETE_USER = "DELETE FROM \"user\" WHERE id = ?";
+    String DELETE_USER = "DELETE FROM \"user\" WHERE id =?";
 
     static List<User> getUserData(String query, Object... params) {
         List<User> users = new ArrayList<>();
