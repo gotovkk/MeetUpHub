@@ -1,7 +1,6 @@
 package meetuphub.repository;
 
 import meetuphub.DBUtils;
-import meetuphub.models.Event;
 import meetuphub.models.User;
 import meetuphub.exceptions.DatabaseException;
 import meetuphub.exceptions.UserAlreadyExistException;
