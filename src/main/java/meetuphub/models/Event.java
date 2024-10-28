@@ -13,15 +13,7 @@ public class Event {
     private Integer locationId;
     private Integer organizerId;
 
-    public Event(int id,
-                 String name,
-                 String description,
-                 String status,
-                 LocalDateTime startTime,
-                 LocalDateTime endTime,
-                 String locationId,
-                 int organizerId
-    ) { }
+
 
     @Override
     public String toString() {
