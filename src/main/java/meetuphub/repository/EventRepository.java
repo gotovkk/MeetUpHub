@@ -2,9 +2,7 @@ package meetuphub.repository;
 
 import meetuphub.DBUtils;
 import meetuphub.models.Event;
-import meetuphub.models.User;
 import meetuphub.exceptions.DatabaseException;
-import meetuphub.exceptions.UserAlreadyExistException;
 import meetuphub.exceptions.UserNotFoundException;
 import meetuphub.exceptions.UserUpdateException;
 
@@ -15,7 +13,7 @@ import java.util.List;
 
 public interface EventRepository {
     String INSERT_EVENT = "INSERT INTO event (name, description, status, start_time, end_time, location_id, organizer_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    String DELETE_EVENT = "DELETE FROM \"event\" WHERE id = ?";
+    String DELETE_EVENT = "DELETE FROM event WHERE id = ?";
     String INSERT_EVENT_CATEGORY = "INSERT INTO event_categories (event_id, category_id) VALUES (?, ?)";
     String INSERT_EVENT_PARTICIPANT = "INSERT INTO event_participants (event_id, participant_id) VALUES (?, ?)";
     String INSERT_EVENT_TAG = "INSERT INTO event_tags (event_id, tag_id) VALUES (?, ?)";
@@ -24,7 +22,8 @@ public interface EventRepository {
     static List<Event> getEventData(String query) {
         List<Event> events = new ArrayList<>();
 
-        try (Connection connection = DBUtils.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (Connection connection = DBUtils.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
@@ -35,10 +34,12 @@ public interface EventRepository {
                 String status = rs.getString(4);
                 LocalDateTime startTime = rs.getTimestamp(5).toLocalDateTime();
                 LocalDateTime endTime = rs.getTimestamp(6).toLocalDateTime();
-                String locationId = rs.getString(7);
-                int organizerId = rs.getInt(8);
+                rs.getTimestamp("created_at");
+                LocalDateTime createdAt = null;
+                int locationId = rs.getInt(8);
+                int organizerId = rs.getInt(9);
 
-                events.add(new Event(id, name, description, status, startTime, endTime, locationId, organizerId));
+                events.add(new Event(id, name, description, status, startTime, endTime, createdAt, locationId, organizerId));
             }
 
         } catch (SQLException e) {
@@ -48,23 +49,23 @@ public interface EventRepository {
         return events;
     }
 
-    static List<Event> saveEventData(Event Event) {
+    static List<Event> saveEventData(Event event) {
         List<Event> events = new ArrayList<>();
 
         try (Connection connection = DBUtils.getConnection();
 
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EVENT)) {
-            preparedStatement.setString(1, Event.getName());
-            preparedStatement.setString(2, Event.getDescription());
-            preparedStatement.setString(3, Event.getStatus());
-            preparedStatement.setString(4, Event.getStartTime().toString());
-            preparedStatement.setString(5, Event.getEndTime().toString());
+            preparedStatement.setString(1, event.getName());
+            preparedStatement.setString(2, event.getDescription());
+            preparedStatement.setString(3, event.getStatus());
+            preparedStatement.setString(4, event.getStartTime().toString());
+            preparedStatement.setString(5, event.getEndTime().toString());
 
             // Тут потом привязку айди от юзера который сейчас
-            Integer organizerId = Event.getOrganizerId();
+            Integer organizerId = event.getOrganizerId();
             preparedStatement.setInt(6, organizerId);
 
-            Integer locationId = Event.getLocationId();
+            Integer locationId = event.getLocationId();
             preparedStatement.setInt(7, locationId);
 
             preparedStatement.executeUpdate();
@@ -77,6 +78,7 @@ public interface EventRepository {
 
 
     static void updateEventData(Event event) {
+        // Подумать может что-то еще кроме stringbuilder
         StringBuilder query = new StringBuilder("UPDATE event SET ");
         List<Object> params = new ArrayList<>();
 
