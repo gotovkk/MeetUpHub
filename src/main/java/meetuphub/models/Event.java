@@ -13,6 +13,9 @@ public class Event {
     private Integer locationId;
     private Integer organizerId;
 
+    public Event() {
+
+    }
 
 
     @Override
@@ -30,7 +33,8 @@ public class Event {
                 '}';
     }
 
-    public Event(int id,
+    public Event(
+                int id,
                  String name,
                  String description,
                  String status,

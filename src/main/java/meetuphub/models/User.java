@@ -9,9 +9,7 @@ public class User {
     private String passwordHash;
     private LocalDateTime createdAt;
 
-    public User() {
-
-    }
+    public User() {}
 
     @Override
     public String toString() {
@@ -24,15 +22,12 @@ public class User {
                 '}';
     }
 
-
     public User(
-            int id,
             String name,
             String email,
             String passwordHash,
             LocalDateTime createdAt
     ) {
-        this.id = id;
         this.name = name;
         this.email = email;
         this.passwordHash = passwordHash;
