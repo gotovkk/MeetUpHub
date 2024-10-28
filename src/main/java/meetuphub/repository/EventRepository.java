@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface EventRepository {
-    String INSERT_EVENT = "INSERT INTO event (name, description, status, start_time, end_time, location_id, organizer_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
     String DELETE_EVENT = "DELETE FROM event WHERE id = ?";
     String INSERT_EVENT_CATEGORY = "INSERT INTO event_categories (event_id, category_id) VALUES (?, ?)";
     String INSERT_EVENT_PARTICIPANT = "INSERT INTO event_participants (event_id, participant_id) VALUES (?, ?)";
@@ -21,8 +20,6 @@ public interface EventRepository {
 
     static List<Event> getEventData(String query, Object... params) {
         List<Event> events = new ArrayList<>();
-
-
 
         try (Connection connection = DBUtils.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -46,7 +43,7 @@ public interface EventRepository {
                 int locationId = rs.getInt(8);
                 int organizerId = rs.getInt(9);
 
-                events.add(new Event(id, name, description, status, startTime, endTime, createdAt, locationId, organizerId));
+                events.add(new Event(id ,name, description, status, startTime, endTime, createdAt, locationId, organizerId));
             }
 
         } catch (SQLException e) {
@@ -56,33 +53,43 @@ public interface EventRepository {
         return events;
     }
 
-    static List<Event> saveEventData(Event event) {
-        List<Event> events = new ArrayList<>();
+    public static void saveEventData(Event event) {
+        String sql = new StringBuilder().append("INSERT INTO event (name, description, status, start_time, end_time, created_at, location_id, organizer_id) ").append("VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id").toString();
 
         try (Connection connection = DBUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EVENT)) {
             preparedStatement.setString(1, event.getName());
             preparedStatement.setString(2, event.getDescription());
             preparedStatement.setString(3, event.getStatus());
-            preparedStatement.setString(4, event.getStartTime().toString());
-            preparedStatement.setString(5, event.getEndTime().toString());
+            preparedStatement.setTimestamp(4, Timestamp.valueOf(event.getStartTime()));
+            preparedStatement.setTimestamp(5, Timestamp.valueOf(event.getEndTime()));
 
-            // Тут потом привязку айди от юзера который сейчас
-            Integer organizerId = event.getOrganizerId();
-            preparedStatement.setInt(6, organizerId);
+            if (event.getCreatedAt() != null) {
+                preparedStatement.setTimestamp(6, Timestamp.valueOf(event.getCreatedAt()));
+            } else {
+                preparedStatement.setNull(6, Types.TIMESTAMP); // Устанавливаем NULL, если значение отсутствует
+            }
 
-            Integer locationId = event.getLocationId();
-            preparedStatement.setInt(7, locationId);
+            preparedStatement.setObject(7, event.getLocationId());
+            preparedStatement.setObject(8, event.getOrganizerId());
 
-            preparedStatement.executeUpdate();
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Не удалось добавить событие, нет затронутых строк.");
+            }
 
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    event.setId(generatedKeys.getInt(1));
+                } else {
+                    throw new SQLException("Не удалось получить ID события.");
+                }
+            }
         } catch (SQLException e) {
-            throw new DatabaseException("Ошибка при сохранени события пользователя.");
+            throw new DatabaseException("Ошибка при сохранении данных события: " + e.getMessage());
         }
-        return events;
     }
-
 
     static void updateEventData(Event event) {
         // Подумать может что-то еще кроме stringbuilder
@@ -154,4 +161,7 @@ public interface EventRepository {
         return events;
     }
 
+    static List<Event> getAllEvents() {
+        return getEventData("SELECT * FROM event");
+    }
 }

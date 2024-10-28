@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface UserRepository {
-    String INSERT_USER = "INSERT INTO \"user\" (name, email, password_hash) VALUES (?, ?, ?);";
     String UPDATE_USER = "UPDATE \"user\" SET name = ? WHERE id = ?";
     String DELETE_USER = "DELETE FROM \"user\" WHERE id =?";
 
@@ -29,41 +28,53 @@ public interface UserRepository {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("id");
                 String name = rs.getString("name");
                 String email = rs.getString("email");
                 String passwordHash = rs.getString("password_hash");
-                rs.getTimestamp("created_at");
-                LocalDateTime createdAt = null;
+                LocalDateTime createdAt = rs.getTimestamp("created_at").toLocalDateTime();
 
-                users.add(new User(id, name, email, passwordHash, createdAt));
+                users.add(new User(name, email, passwordHash, createdAt));
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Ошибка при получении данных пользователя.");
+//            throw new DatabaseException("Ошибка при получении данных пользователя.");
+            throw new RuntimeException(e);
         }
 
         return users;
     }
 
-    static List<User> saveUserData(User user) {
-        List<User> users = new ArrayList<>();
+    public static int saveUserData(User user) {
+        String INSERT_USER = "INSERT INTO \"user\" (name, email, password_hash) VALUES (?, ?, ?) RETURNING id";
 
-        if (!getUserData("SELECT * FROM \"user\" WHERE email = '" + user.getEmail() + "'").isEmpty()) {
+        if (!getUserData("SELECT * FROM \"user\" WHERE email = ?", user.getEmail()).isEmpty()) {
             throw new UserAlreadyExistException("Пользователь с таким email уже существует: " + user.getEmail());
-
         }
 
-        try (Connection connection = DBUtils.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER)) {
+        try (Connection connection = DBUtils.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
+
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getEmail());
             preparedStatement.setString(3, user.getPasswordHash());
-            preparedStatement.executeUpdate();
+
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Не удалось добавить пользователя, нет затронутых строк.");
+            }
+
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    user.setId(generatedKeys.getInt(1));
+                    return user.getId();
+                } else {
+                    throw new SQLException("Не удалось получить ID пользователя.");
+                }
+            }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Ошибка при сохранени данных пользователя.");
+            throw new DatabaseException("Ошибка при сохранении данных пользователя: " + e.getMessage());
         }
-        return users;
     }
 
     static List<User> updateUserData(int userId, String username) {
@@ -97,9 +108,5 @@ public interface UserRepository {
         }
         return users;
     }
-
-//    static List<Event> getEventForUser(int userId) {
-//        return EventUserRepository.getEventByUserId(userId);
-//    }
 
 }
