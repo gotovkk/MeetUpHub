@@ -7,15 +7,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public interface EventUserRepository {
-    String INSERT_EVENT_USER = "INSERT INTO event_user VALUES(?, ?, ?, ?)";
+public interface EventTagRepository {
+    String INSERT_EVENT_CATEGORY = "INSERT INTO event_tag VALUES(?, ?)";
 
-    static void addUserToEvent(int eventId, int userId) {
+    static void addUserToEvent(int eventId, int tagId) {
         try (Connection connection = DBUtils.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EVENT_USER)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EVENT_CATEGORY)) {
             preparedStatement.setInt(1, eventId);
-            preparedStatement.setInt(2, userId);
-
+            preparedStatement.setInt(2, tagId);
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
