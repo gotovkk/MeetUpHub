@@ -19,11 +19,18 @@ public interface EventRepository {
     String INSERT_EVENT_TAG = "INSERT INTO event_tags (event_id, tag_id) VALUES (?, ?)";
 
 
-    static List<Event> getEventData(String query) {
+    static List<Event> getEventData(String query, Object... params) {
         List<Event> events = new ArrayList<>();
+
+
 
         try (Connection connection = DBUtils.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            for (int i = 0; i < params.length; i++) {
+                preparedStatement.setObject(i + 1, params[i]);
+            }
+
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
@@ -54,7 +61,7 @@ public interface EventRepository {
 
         try (Connection connection = DBUtils.getConnection();
 
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EVENT)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EVENT)) {
             preparedStatement.setString(1, event.getName());
             preparedStatement.setString(2, event.getDescription());
             preparedStatement.setString(3, event.getStatus());
