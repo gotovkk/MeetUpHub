@@ -13,22 +13,22 @@ public class App {
 
 
     public static void main(String[] args) {
-            Role adminRole1 = new Role();
-            adminRole1.setName("admin1");
-            RoleRepository.saveRoleData(adminRole1);
+            Role adminRole = new Role();
+            adminRole.setName("admin");
+            RoleRepository.saveRoleData(adminRole);
 
             EventService eventService = new EventService();
 
             User test = new User();
-            test.setName("test");
-            test.setEmail("test1@test.com");
+            test.setName("test1");
+            test.setEmail("test@test.com");
             test.setPasswordHash("123123");
             UserRepository.saveUserData(test);
             logger.info("ID пользователя после сохранения: " + test.getId());
-            UserRoleRepository.addRoleToUser(test.getId(), adminRole1.getId());
+            UserRoleRepository.addRoleToUser(test.getId(), 1);
 
 
-            Event event = new Event(1, "Test Event", "Event description", "active",
+            Event event = new Event(1, "Back", "Event description", "coming soon",
                     LocalDateTime.now(), LocalDateTime.now().plusHours(2),
                     LocalDateTime.now(), 1, test.getId());
             EventRepository.saveEventData(event);
@@ -36,14 +36,14 @@ public class App {
             logger.info("ID события после сохранения: " + event.getId());
 
             Category category = new Category();
-            category.setName("WebTest");
+            category.setName("Back");
             CategoryRepository.saveCategoryData(category);
 
             eventService.addEventToCategory(event.getId(), category.getId());
             logger.info("Категория добавлена к событию.");
 
             Tag tag = new Tag();
-            tag.setName("Tech");
+            tag.setName("Test");
             TagRepository.saveTagData(tag);
 
             eventService.addTagToEvent(tag.getId(), event.getId());
