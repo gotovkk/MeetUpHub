@@ -1,11 +1,12 @@
 package meetuphub.service;
 
-import meetuphub.models.Event;
 import meetuphub.models.Role;
 import meetuphub.models.User;
 import meetuphub.repository.*;
 
 import java.util.List;
+
+// Реализация добавления роли юзеру при регистрации(?)
 
 public class UserService {
 

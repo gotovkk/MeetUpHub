@@ -37,8 +37,7 @@ public interface UserRepository {
             }
 
         } catch (SQLException e) {
-//            throw new DatabaseException("Ошибка при получении данных пользователя.");
-            throw new RuntimeException(e);
+            throw new DatabaseException("Ошибка при получении данных пользователя.");
         }
 
         return users;

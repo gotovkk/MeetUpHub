@@ -59,14 +59,6 @@ CREATE TABLE event_user
     PRIMARY KEY (user_id, event_id)
 );
 
-CREATE TABLE location_category
-(
-    location_id INTEGER NOT NULL REFERENCES location (id) ON DELETE CASCADE,
-    category_id INTEGER NOT NULL REFERENCES category (id) ON DELETE CASCADE,
-    PRIMARY KEY (location_id, category_id)
-);
-
-
 CREATE TABLE tag
 (
     id   INTEGER NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY,

@@ -11,6 +11,10 @@ public class Category {
         this.description = description;
     }
 
+    public Category() {
+
+    }
+
     public int getId() {
         return id;
     }

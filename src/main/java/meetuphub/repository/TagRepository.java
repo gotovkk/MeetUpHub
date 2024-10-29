@@ -4,21 +4,17 @@ import meetuphub.DBUtils;
 import meetuphub.exceptions.DatabaseException;
 import meetuphub.exceptions.UserNotFoundException;
 import meetuphub.exceptions.UserUpdateException;
-import meetuphub.models.Role;
+import meetuphub.models.Tag;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface RoleRepository {
-    String INSERT_ROLE = "INSERT INTO role (name) VALUES (?);";
-    String DELETE_ROLE = "DELETE FROM role WHERE id = ?";
+public interface TagRepository {
+    String DELETE_TAG = "DELETE FROM tag WHERE id = ?";
 
-    static List<Role> getRoleData(String query, Object... params) {
-        List<Role> roles = new ArrayList<>();
+    static List<Tag> getTagData(String query, Object... params) {
+        List<Tag> tags = new ArrayList<>();
 
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -32,40 +28,49 @@ public interface RoleRepository {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
 
-
-                roles.add(new Role(id, name));
+                tags.add(new Tag(id, name));
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Ошибка при получении данных пользователя.");
+            throw new DatabaseException("Ошибка при получении данных о теге.");
         }
 
-        return roles;
+        return tags;
     }
 
-    static List<Role> saveRoleData(Role role) {
-        List<Role> roles = new ArrayList<>();
+    static List<Tag> saveTagData(Tag tag) {
+        String sql = new StringBuilder().append("INSERT INTO tag (name)").append("VALUES (?) RETURNING id").toString();
+
+        List<Tag> tags = new ArrayList<>();
 
         try (Connection connection = DBUtils.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ROLE)) {
-            preparedStatement.setString(1, role.getName());
+             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            preparedStatement.setString(1, tag.getName());
             preparedStatement.executeUpdate();
 
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    tag.setId(generatedKeys.getInt(1));
+                } else {
+                    throw new SQLException("Не удалось получить ID события.");
+                }
+            }
         } catch (SQLException e) {
-            //      throw new DatabaseException("Ошибка при сохранени данных о роли.");
-            throw new RuntimeException(e);
+            throw new DatabaseException("Ошибка при сохранени данных о теге.");
         }
-        return roles;
+        return tags;
     }
 
-    static void updateRoleData(Role role) {
+    static void updateTagData(Tag tag) {
         // Подумать может что-то еще кроме StringBuilder
-        StringBuilder query = new StringBuilder("UPDATE role SET ");
+        StringBuilder query = new StringBuilder("UPDATE tag SET ");
         List<Object> params = new ArrayList<>();
 
-        if (role.getName() != null) {
+        if (tag.getName() != null) {
             query.append("name = ?,");
-            params.add(role.getName());
+            params.add(tag.getName());
         }
+
 
         if (params.isEmpty()) {
             throw new IllegalStateException("Не указаны параметры для обновления.");
@@ -73,7 +78,7 @@ public interface RoleRepository {
 
         query.setLength(query.length() - 2);
         query.append(" WHERE id = ?");
-        params.add(role.getId());
+        params.add(tag.getId());
 
         try (Connection connection = DBUtils.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query.toString())) {
@@ -89,16 +94,16 @@ public interface RoleRepository {
         }
     }
 
-    static List<Role> deleteRoleData(int roleId) {
-        List<Role> roles = new ArrayList<>();
+    static List<Tag> deleteTagData(int tagId) {
+        List<Tag> roles = new ArrayList<>();
         try (Connection connection = DBUtils.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ROLE)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_TAG)) {
 
-            preparedStatement.setInt(1, roleId);
+            preparedStatement.setInt(1, tagId);
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new UserNotFoundException("Роль: " + roleId + " не найден.");
+            throw new UserNotFoundException("Тег с id: " + tagId + " не найден.");
         }
         return roles;
     }

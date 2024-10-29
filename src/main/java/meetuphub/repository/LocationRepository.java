@@ -5,7 +5,7 @@ import meetuphub.exceptions.DatabaseException;
 
 import meetuphub.exceptions.UserNotFoundException;
 import meetuphub.exceptions.UserUpdateException;
-import meetuphub.models.Event;
+
 import meetuphub.models.Location;
 
 

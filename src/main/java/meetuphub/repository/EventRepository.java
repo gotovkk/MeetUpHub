@@ -13,16 +13,12 @@ import java.util.List;
 
 public interface EventRepository {
     String DELETE_EVENT = "DELETE FROM event WHERE id = ?";
-    String INSERT_EVENT_CATEGORY = "INSERT INTO event_categories (event_id, category_id) VALUES (?, ?)";
-    String INSERT_EVENT_PARTICIPANT = "INSERT INTO event_participants (event_id, participant_id) VALUES (?, ?)";
-    String INSERT_EVENT_TAG = "INSERT INTO event_tags (event_id, tag_id) VALUES (?, ?)";
-
 
     static List<Event> getEventData(String query, Object... params) {
         List<Event> events = new ArrayList<>();
 
         try (Connection connection = DBUtils.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             for (int i = 0; i < params.length; i++) {
                 preparedStatement.setObject(i + 1, params[i]);
@@ -43,7 +39,7 @@ public interface EventRepository {
                 int locationId = rs.getInt(8);
                 int organizerId = rs.getInt(9);
 
-                events.add(new Event(id ,name, description, status, startTime, endTime, createdAt, locationId, organizerId));
+                events.add(new Event(id, name, description, status, startTime, endTime, createdAt, locationId, organizerId));
             }
 
         } catch (SQLException e) {
