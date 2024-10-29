@@ -4,7 +4,7 @@
 - **БД**
 - **JDBC**
 - **JSP**
-- ** SprintBoot + Hibernate**
+- **SprintBoot** + **Hibernate**
 - **Angular**
 - **React**
 
@@ -13,7 +13,7 @@
 - **8 часов.**
 ### Факт
 - **2.5 часа.**(+исправление ошибок)
-- **9 часов.**
+- **10 часов.**
 
 ### SonarCloud
 https://sonarcloud.io/project/overview?id=gotovkk_MeetUpHub
