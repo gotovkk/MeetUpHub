@@ -65,11 +65,8 @@ public interface EventRepository {
             preparedStatement.setTimestamp(4, Timestamp.valueOf(event.getStartTime()));
             preparedStatement.setTimestamp(5, Timestamp.valueOf(event.getEndTime()));
 
-            if (event.getCreatedAt() != null) {
-                preparedStatement.setTimestamp(6, Timestamp.valueOf(event.getCreatedAt()));
-            } else {
-                preparedStatement.setNull(6, Types.TIMESTAMP); // Устанавливаем NULL, если значение отсутствует
-            }
+            preparedStatement.setTimestamp(6, Timestamp.valueOf(event.getCreatedAt()));
+
 
             preparedStatement.setObject(7, event.getLocationId());
             preparedStatement.setObject(8, event.getOrganizerId());
