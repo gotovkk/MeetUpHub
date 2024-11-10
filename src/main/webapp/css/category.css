@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f7f9fc;
+    color: #333;
+    text-align: center;
+    margin: 0;
+    padding: 40px 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    font-size: 2rem;
+    color: #5f6368;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Стиль для таблицы */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+th, td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+th {
+    background-color: #a0c4ff;
+    color: #fff;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+td {
+    background-color: #f9fbfd;
+    color: #5f6368;
+}
+
+tr:hover td {
+    background-color: #f1f5f9;
+}
+
+h3 {
+    font-size: 1.5rem;
+    color: #5f6368;
+    margin-top: 25px;
+    text-transform: uppercase;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+label {
+    font-size: 0.9rem;
+    color: #333;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 0.9rem;
+    border: 1px solid #d1d9e6;
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus {
+    border-color: #a0c4ff;
+    outline: none;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+button {
+    background-color: #a0c4ff;
+    color: #fff;
+    font-size: 1rem;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: #8daef5;
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(1);
+}
+
+.btn-back {
+    background-color: #d1d9e6;
+    color: #333;
+}
+
+.btn-back:hover {
+    background-color: #b8c6dc;
+}

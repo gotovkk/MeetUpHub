@@ -1,0 +1,56 @@
+/* Подключаем шрифт */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f4f8;
+    color: #333333;
+    text-align: center;
+    padding: 40px 0;
+}
+
+h2 {
+    font-size: 2.5rem;
+    margin-bottom: 25px;
+    color: #5f6368;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+button {
+    background-color: #a0c4ff;
+    color: #ffffff;
+    font-size: 1.1rem;
+    padding: 12px 25px;
+    margin: 10px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: #8daef5;
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:focus {
+    outline: none;
+}
+
+button:focus-visible {
+    outline: 2px solid #a0c4ff;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}

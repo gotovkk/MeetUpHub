@@ -1,0 +1,67 @@
+/* Подключаем шрифт */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f4f8;
+    color: #333333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #d9534f;
+}
+
+p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #555555;
+}
+
+button {
+    font-size: 1rem;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"] {
+    background-color: #d9534f;
+    color: #ffffff;
+}
+
+button[type="submit"]:hover {
+    background-color: #c9302c;
+}
+
+button.cancel {
+    background-color: #a0c4ff;
+    color: #ffffff;
+}
+
+button.cancel:hover {
+    background-color: #8daef5;
+}
+
+button:active {
+    transform: scale(0.98);
+}

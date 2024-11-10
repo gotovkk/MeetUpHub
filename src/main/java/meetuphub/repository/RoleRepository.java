@@ -1,10 +1,10 @@
 package meetuphub.repository;
 
-import meetuphub.DBUtils;
-import meetuphub.exceptions.DatabaseException;
-import meetuphub.exceptions.UserNotFoundException;
-import meetuphub.exceptions.UserUpdateException;
-import meetuphub.models.Role;
+import meetuphub.DatabaseConnection;
+import meetuphub.exception.DatabaseException;
+import meetuphub.exception.UserNotFoundException;
+import meetuphub.exception.UserUpdateException;
+import meetuphub.model.Role;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,7 +20,7 @@ public interface RoleRepository {
     static List<Role> getRoleData(String query, Object... params) {
         List<Role> roles = new ArrayList<>();
 
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             for (int i = 0; i < params.length; i++) {
                 preparedStatement.setObject(i + 1, params[i]);
@@ -45,14 +45,13 @@ public interface RoleRepository {
     static List<Role> saveRoleData(Role role) {
         List<Role> roles = new ArrayList<>();
 
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ROLE)) {
             preparedStatement.setString(1, role.getName());
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            //      throw new DatabaseException("Ошибка при сохранени данных о роли.");
-            throw new RuntimeException(e);
+            throw new DatabaseException("Ошибка при сохранени данных о роли.");
         }
         return roles;
     }
@@ -75,7 +74,7 @@ public interface RoleRepository {
         query.append(" WHERE id = ?");
         params.add(role.getId());
 
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query.toString())) {
 
             for (int i = 0; i < params.size(); i++) {
@@ -91,7 +90,7 @@ public interface RoleRepository {
 
     static List<Role> deleteRoleData(int roleId) {
         List<Role> roles = new ArrayList<>();
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ROLE)) {
 
             preparedStatement.setInt(1, roleId);

@@ -1,12 +1,12 @@
 package meetuphub.repository;
 
-import meetuphub.DBUtils;
-import meetuphub.exceptions.DatabaseException;
+import meetuphub.DatabaseConnection;
+import meetuphub.exception.DatabaseException;
 
-import meetuphub.exceptions.UserNotFoundException;
-import meetuphub.exceptions.UserUpdateException;
+import meetuphub.exception.UserNotFoundException;
+import meetuphub.exception.UserUpdateException;
 
-import meetuphub.models.Location;
+import meetuphub.model.Location;
 
 
 import java.sql.Connection;
@@ -23,7 +23,7 @@ public interface LocationRepository {
     static List<Location> getLocationData(String query) {
         List<Location> locations = new ArrayList<>();
 
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             ResultSet rs = preparedStatement.executeQuery();
@@ -46,7 +46,7 @@ public interface LocationRepository {
     static List<Location> saveLocationData(Location location) {
         List<Location> locations = new ArrayList<>();
 
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_LOCATION)) {
             preparedStatement.setString(1, location.getName());
             preparedStatement.setString(2, location.getAddress());
@@ -85,7 +85,7 @@ public interface LocationRepository {
         query.append(" WHERE id = ?");
         params.add(location.getId());
 
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query.toString())) {
 
             for (int i = 0; i < params.size(); i++) {
@@ -101,7 +101,7 @@ public interface LocationRepository {
 
     static List<Location> deleteLocationData(int locationId) {
         List<Location> locations = new ArrayList<>();
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_LOCATION)) {
 
             preparedStatement.setInt(1, locationId);

@@ -59,20 +59,6 @@ CREATE TABLE event_user
     PRIMARY KEY (user_id, event_id)
 );
 
-CREATE TABLE tag
-(
-    id   INTEGER NOT NULL UNIQUE GENERATED ALWAYS AS IDENTITY,
-    name TEXT    NOT NULL UNIQUE,
-    PRIMARY KEY (id)
-);
-
-CREATE TABLE event_tag
-(
-    event_id INTEGER NOT NULL REFERENCES event (id) ON DELETE CASCADE,
-    tag_id   INTEGER NOT NULL REFERENCES tag (id) ON DELETE CASCADE,
-    PRIMARY KEY (event_id, tag_id)
-);
-
 
 CREATE TABLE role
 (

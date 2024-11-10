@@ -1,8 +1,8 @@
 package meetuphub.repository;
 
-import meetuphub.DBUtils;
-import meetuphub.exceptions.DatabaseException;
-import meetuphub.models.Category;
+import meetuphub.DatabaseConnection;
+import meetuphub.exception.DatabaseException;
+import meetuphub.model.Category;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,7 +19,7 @@ public interface EventCategoryRepository {
 
 
     static void addEventToCategory(int eventId, int categoryId) {
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EVENT_CATEGORY)) {
             preparedStatement.setInt(1, eventId);
             preparedStatement.setInt(2, categoryId);
@@ -31,7 +31,7 @@ public interface EventCategoryRepository {
     }
     static List<Category> getCategoriesByEventId(int eventId) {
         List<Category> categories = new ArrayList<>();
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_CATEGORIES_BY_EVENT_ID)) {
             preparedStatement.setInt(1, eventId);
             ResultSet resultSet = preparedStatement.executeQuery();

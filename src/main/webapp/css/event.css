@@ -1,0 +1,149 @@
+/* Подключаем шрифт */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f4f8;
+    color: #333333;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #5f6368;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.create-event-title {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #5f6368;
+}
+
+.create-button {
+    background-color: #a0c4ff;
+    color: white;
+    font-size: 1.1rem;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.create-button:hover {
+    background-color: #8daef5;
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.create-button:active {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.create-button:focus {
+    outline: none;
+}
+
+.create-button:focus-visible {
+    outline: 2px solid #a0c4ff;
+}
+
+.user-info {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 14px;
+    color: #333;
+}
+
+.success-message {
+    color: green;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.event-card {
+    background-color: #ffffff;
+    padding: 30px 20px;
+    margin: 15px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 100%;
+}
+
+.event-card p {
+    margin: 5px 0;
+}
+
+.category {
+    background-color: #e0f7fa;
+    color: #00796b;
+    display: inline-block;
+    padding: 5px 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+.status-message {
+    color: green;
+    font-weight: bold;
+}
+
+.register-button {
+    background-color: #a0c4ff;
+    color: white;
+    font-size: 1rem;
+    padding: 8px 15px;
+    margin-top:20px  ;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.register-button:hover {
+    background-color: #8daef5;
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.register-button:active {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.register-button:focus {
+    outline: none;
+}
+
+.register-button:focus-visible {
+    outline: 2px solid #a0c4ff;
+}
+
+.event-actions {
+    margin-top: 20px;
+}
+
+.action-link {
+    text-decoration: none;
+    color: #00796b;
+    font-weight: bold;
+    padding: 5px;
+    transition: color 0.3s ease;
+}
+
+.action-link:hover {
+    color: #004d40;
+}

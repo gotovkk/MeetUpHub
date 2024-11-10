@@ -1,11 +1,11 @@
 package meetuphub.repository;
 
-import meetuphub.DBUtils;
-import meetuphub.models.User;
-import meetuphub.exceptions.DatabaseException;
-import meetuphub.exceptions.UserAlreadyExistException;
-import meetuphub.exceptions.UserNotFoundException;
-import meetuphub.exceptions.UserUpdateException;
+import meetuphub.DatabaseConnection;
+import meetuphub.model.User;
+import meetuphub.exception.DatabaseException;
+import meetuphub.exception.UserAlreadyExistException;
+import meetuphub.exception.UserNotFoundException;
+import meetuphub.exception.UserUpdateException;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -15,11 +15,12 @@ import java.util.List;
 public interface UserRepository {
     String UPDATE_USER = "UPDATE \"user\" SET name = ? WHERE id = ?";
     String DELETE_USER = "DELETE FROM \"user\" WHERE id =?";
+    String INSERT_USER = "INSERT INTO \"user\" (name, email, password_hash) VALUES (?, ?, ?) RETURNING id";
 
     static List<User> getUserData(String query, Object... params) {
         List<User> users = new ArrayList<>();
 
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             for (int i = 0; i < params.length; i++) {
@@ -28,12 +29,14 @@ public interface UserRepository {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
+                int id = rs.getInt("id");
                 String name = rs.getString("name");
                 String email = rs.getString("email");
                 String passwordHash = rs.getString("password_hash");
                 LocalDateTime createdAt = rs.getTimestamp("created_at").toLocalDateTime();
 
-                users.add(new User(name, email, passwordHash, createdAt));
+                users.add(new User(id, name, email, passwordHash, createdAt));
+
             }
 
         } catch (SQLException e) {
@@ -43,14 +46,13 @@ public interface UserRepository {
         return users;
     }
 
-    public static int saveUserData(User user) {
-        String INSERT_USER = "INSERT INTO \"user\" (name, email, password_hash) VALUES (?, ?, ?) RETURNING id";
+    static int saveUserData(User user) {
 
         if (!getUserData("SELECT * FROM \"user\" WHERE email = ?", user.getEmail()).isEmpty()) {
             throw new UserAlreadyExistException("Пользователь с таким email уже существует: " + user.getEmail());
         }
 
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setString(1, user.getName());
@@ -83,7 +85,7 @@ public interface UserRepository {
             throw new UserNotFoundException("Пользователь с id: " + userId + " не найден.");
         }
 
-        try (Connection connection = DBUtils.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER)) {
+        try (Connection connection = DatabaseConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER)) {
 
             preparedStatement.setString(1, username);
             preparedStatement.setInt(2, userId);
@@ -97,7 +99,7 @@ public interface UserRepository {
 
     static List<User> deleteUserData(int userId) {
         List<User> users = new ArrayList<>();
-        try (Connection connection = DBUtils.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
+        try (Connection connection = DatabaseConnection.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
 
             preparedStatement.setInt(1, userId);
             preparedStatement.executeUpdate();
@@ -107,5 +109,4 @@ public interface UserRepository {
         }
         return users;
     }
-
 }

@@ -1,10 +1,10 @@
 package meetuphub.repository;
 
-import meetuphub.DBUtils;
-import meetuphub.models.Event;
-import meetuphub.exceptions.DatabaseException;
-import meetuphub.exceptions.UserNotFoundException;
-import meetuphub.exceptions.UserUpdateException;
+import meetuphub.DatabaseConnection;
+import meetuphub.model.Event;
+import meetuphub.exception.DatabaseException;
+import meetuphub.exception.UserNotFoundException;
+import meetuphub.exception.UserUpdateException;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -17,7 +17,7 @@ public interface EventRepository {
     static List<Event> getEventData(String query, Object... params) {
         List<Event> events = new ArrayList<>();
 
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             for (int i = 0; i < params.length; i++) {
@@ -35,7 +35,7 @@ public interface EventRepository {
                 LocalDateTime startTime = rs.getTimestamp(5).toLocalDateTime();
                 LocalDateTime endTime = rs.getTimestamp(6).toLocalDateTime();
                 rs.getTimestamp("created_at");
-                LocalDateTime createdAt = null;
+                LocalDateTime createdAt = rs.getTimestamp(7).toLocalDateTime();
                 int locationId = rs.getInt(8);
                 int organizerId = rs.getInt(9);
 
@@ -49,10 +49,10 @@ public interface EventRepository {
         return events;
     }
 
-    public static void saveEventData(Event event) {
+    static void saveEventData(Event event) {
         String sql = new StringBuilder().append("INSERT INTO event (name, description, status, start_time, end_time, created_at, location_id, organizer_id) ").append("VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id").toString();
 
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setString(1, event.getName());
@@ -95,38 +95,42 @@ public interface EventRepository {
         }
         if (event.getDescription() != null) {
             query.append("description = ?,");
-            params.add(event.getName());
+            params.add(event.getDescription());
         }
         if (event.getStatus() != null) {
             query.append("status = ?,");
-            params.add(event.getName());
+            params.add(event.getStatus());
         }
         if (event.getStartTime() != null) {
             query.append("start_time = ?,");
-            params.add(event.getName());
+            params.add(event.getStartTime());
         }
         if (event.getEndTime() != null) {
             query.append("end_time = ?,");
-            params.add(event.getName());
+            params.add(event.getEndTime());
+        }
+        if (event.getCreatedAt() != null) {
+            query.append("created_at = ?,");
+            params.add(event.getCreatedAt());
         }
         if (event.getLocationId() != null) {
             query.append("location_id = ?,");
-            params.add(event.getName());
+            params.add(event.getLocationId());
         }
         if (event.getOrganizerId() != null) {
             query.append("organizer_id = ?,");
-            params.add(event.getName());
+            params.add(event.getOrganizerId());
         }
 
         if (params.isEmpty()) {
             throw new IllegalStateException("Не указаны параметры для обновления.");
         }
 
-        query.setLength(query.length() - 2);
+        query.setLength(query.length() - 1);
         query.append(" WHERE id = ?");
         params.add(event.getId());
 
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query.toString())) {
 
             for (int i = 0; i < params.size(); i++) {
@@ -142,7 +146,7 @@ public interface EventRepository {
 
     static List<Event> deleteEventData(int eventId) {
         List<Event> events = new ArrayList<>();
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_EVENT)) {
 
             preparedStatement.setInt(1, eventId);

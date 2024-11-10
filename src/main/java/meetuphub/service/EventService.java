@@ -1,9 +1,8 @@
 package meetuphub.service;
 
-import meetuphub.models.Category;
-import meetuphub.models.Event;
-import meetuphub.models.Tag;
-import meetuphub.models.User;
+import meetuphub.model.Category;
+import meetuphub.model.Event;
+import meetuphub.model.User;
 import meetuphub.repository.*;
 
 import java.util.List;
@@ -11,6 +10,7 @@ import java.util.List;
 public class EventService {
     // после добавить проверки и перенести часть методов с запросами в репозиторий
     String selectEvent = "SELECT * FROM event WHERE id = ? ";
+
     public void addUserToEvent(int eventId, int userId) {
 
         List<Event> events = EventRepository.getEventData(selectEvent, eventId);
@@ -39,29 +39,12 @@ public class EventService {
         EventCategoryRepository.addEventToCategory(eventId, categoryId);
     }
 
-    public void addTagToEvent(int tagId, int eventId) {
-        List<Event> events = EventRepository.getEventData(selectEvent, eventId);
-        if (events.isEmpty()) {
-            throw new IllegalArgumentException("Ивент не найден");
-        }
-
-        List<Tag> tags = TagRepository.getTagData("SELECT * FROM tag WHERE id = ?", tagId);
-        if (tags.isEmpty()) {
-            throw new IllegalArgumentException("Тег не найден");
-        }
-        EventTagRepository.addTagToEvent(tagId, eventId);
-    }
-
     public List<Event> getAllEvents() {
         return EventRepository.getAllEvents();
     }
 
     public List<Category> getCategoriesByEvent(int eventId) {
         return EventCategoryRepository.getCategoriesByEventId(eventId);
-    }
-
-    public List<Tag> getTagsByEvent(int eventId) {
-        return EventTagRepository.getTagsByEventId(eventId);
     }
 
 

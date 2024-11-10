@@ -1,0 +1,116 @@
+/* Подключаем шрифт */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+
+/* Основные стили для body */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f4f8; /* Однородный пастельный цвет для фона */
+    color: #333333; /* Тёмно-серый цвет текста для хорошей читаемости */
+    text-align: center;
+    padding: 40px 0;
+}
+
+/* Заголовок страницы */
+h2 {
+    font-size: 2.5rem;
+    margin-bottom: 25px;
+    color: #5f6368; /* Мягкий серый цвет для заголовков */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); /* Легкая тень для заголовков */
+}
+
+/* Стили для кнопки "Добавить пользователя" */
+button {
+    background-color: #a0c4ff; /* Мягкий пастельный синий */
+    color: #ffffff;
+    font-size: 1.1rem;
+    padding: 12px 25px;
+    margin: 10px;
+    border: none;
+    border-radius: 15px; /* Слегка округленные углы */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Легкая тень */
+}
+
+button:hover {
+    background-color: #8daef5; /* Немного более насыщенный синий при наведении */
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:focus {
+    outline: none;
+}
+
+button:focus-visible {
+    outline: 2px solid #a0c4ff; /* Подсветка фокуса того же цвета, что и кнопка */
+}
+
+/* Контейнер для кнопок */
+.button-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px; /* Увеличена дистанция между кнопками для лучшего восприятия */
+}
+
+/* Стили для таблицы */
+table {
+    width: 100%;
+    max-width: 900px;
+    margin: 20px auto;
+    border-collapse: collapse; /* Убираем промежутки между ячейками */
+    background-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Тень под таблицей */
+    border-radius: 8px;
+}
+
+/* Стили для строк таблицы */
+th, td {
+    padding: 15px 20px;
+    text-align: left;
+    font-size: 1.1rem;
+    color: #555555;
+    border-bottom: 1px solid #ddd; /* Легкая линия под ячейками */
+}
+
+/* Стиль для заголовков таблицы */
+th {
+    background-color: #f4f7fc;
+    color: #333333;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+}
+
+
+tr:hover {
+    background-color: #f0f4f8;
+    transition: background-color 0.3s ease;
+}
+
+a.btn-action {
+    color: #4CAF50;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+a.btn-action:hover {
+    background-color: #e1f7e2;
+}
+
+a.delete {
+    color: #f44336;
+}
+
+a.delete:hover {
+    background-color: #f8d7d7;
+}

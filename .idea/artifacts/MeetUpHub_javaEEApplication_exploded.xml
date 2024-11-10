@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-ear" name="MeetUpHub:javaEEApplication exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/MeetUpHub_javaEEApplication_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="MeetUpHub/javaeeApplication/javaEEApplication" />
+      <element id="directory" name="lib">
+        <element id="archive" name="MeetUpHub.jar">
+          <element id="module-output" name="MeetUpHub" />
+        </element>
+        <element id="library" level="project" name="Maven: javax.servlet:jstl:1.2" />
+        <element id="library" level="project" name="Maven: org.postgresql:postgresql:42.7.2" />
+        <element id="library" level="project" name="Maven: org.checkerframework:checker-qual:3.42.0" />
+      </element>
+      <element id="javaee-facet-resources" facet="MeetUpHub/web/Web" />
+    </root>
+  </artifact>
+</component>

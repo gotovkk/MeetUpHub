@@ -1,10 +1,9 @@
 package meetuphub.repository;
 
-import meetuphub.DBUtils;
-import meetuphub.exceptions.DatabaseException;
-import meetuphub.exceptions.UserNotFoundException;
-import meetuphub.exceptions.UserUpdateException;
-import meetuphub.models.Category;
+import meetuphub.DatabaseConnection;
+import meetuphub.exception.DatabaseException;
+import meetuphub.exception.UserNotFoundException;
+import meetuphub.model.Category;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public interface CategoryRepository {
     static List<Category> getCategoryData(String query, Object... params) {
         List<Category> categories = new ArrayList<>();
 
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             for (int i = 0; i < params.length; i++) {
                 preparedStatement.setObject(i + 1, params[i]);
@@ -44,7 +43,7 @@ public interface CategoryRepository {
 
         List<Category> categories = new ArrayList<>();
 
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, category.getName());
             preparedStatement.setString(2, category.getDescription());
@@ -58,51 +57,14 @@ public interface CategoryRepository {
                 }
             }
         } catch (SQLException e) {
-            //throw new DatabaseException("Ошибка при сохранени данных о категории.");
-            throw new RuntimeException(e);
+            throw new DatabaseException("Ошибка при сохранени данных о категории.");
         }
         return categories;
     }
 
-    static void updateCategoryData(Category category) {
-        // Подумать может что-то еще кроме StringBuilder
-        StringBuilder query = new StringBuilder("UPDATE category SET ");
-        List<Object> params = new ArrayList<>();
-
-        if (category.getName() != null) {
-            query.append("name = ?,");
-            params.add(category.getName());
-        }
-        if (category.getDescription() != null) {
-            query.append("name = ?,");
-            params.add(category.getName());
-        }
-
-        if (params.isEmpty()) {
-            throw new IllegalStateException("Не указаны параметры для обновления.");
-        }
-
-        query.setLength(query.length() - 2);
-        query.append(" WHERE id = ?");
-        params.add(category.getId());
-
-        try (Connection connection = DBUtils.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query.toString())) {
-
-            for (int i = 0; i < params.size(); i++) {
-                preparedStatement.setObject(i + 1, params.get(i));
-            }
-
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new UserUpdateException("Ошибка обновлении данных.");
-        }
-    }
-
     static List<Category> deleteCategoryData(int categoryId) {
         List<Category> categories = new ArrayList<>();
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CATEGORY)) {
 
             preparedStatement.setInt(1, categoryId);

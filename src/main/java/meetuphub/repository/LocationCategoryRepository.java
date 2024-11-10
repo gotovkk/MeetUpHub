@@ -1,7 +1,7 @@
 package meetuphub.repository;
 
-import meetuphub.DBUtils;
-import meetuphub.exceptions.DatabaseException;
+import meetuphub.DatabaseConnection;
+import meetuphub.exception.DatabaseException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +11,7 @@ public interface LocationCategoryRepository {
     String INSERT_LOCATION_CATEGORY = "INSERT INTO location_category VALUES(?, ?)";
 
     static void addEventToLocation(int locationId, int categoryId) {
-        try (Connection connection = DBUtils.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_LOCATION_CATEGORY)) {
             preparedStatement.setInt(1, locationId);
             preparedStatement.setInt(2, categoryId);
