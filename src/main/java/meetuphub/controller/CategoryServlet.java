@@ -33,7 +33,6 @@ public class CategoryServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Get the new category name and description from the form
         String name = request.getParameter("newCategoryName");
         String description = request.getParameter("newCategoryDescription");
 
