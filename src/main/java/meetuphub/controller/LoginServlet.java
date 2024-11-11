@@ -16,7 +16,7 @@ import static meetuphub.exception.ErrorHandler.handleError;
 
 
 @WebServlet("/login")
-public class LoginServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet  {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

@@ -41,7 +41,7 @@
 
 
         <div class="form-group">
-            <label for="locationId">Id локации:</label>
+            <label for="locationId">ID локации:</label>
             <input type="number" id="locationId" name="locationId" required placeholder="Введите номер локации">
         </div>
 
