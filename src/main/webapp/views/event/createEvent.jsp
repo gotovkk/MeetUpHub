@@ -17,19 +17,18 @@
     <form action="<%= request.getContextPath() %>/event/create" method="post" class="event-form">
         <div class="form-group">
             <label for="name">Имя ивента:</label>
-            <input type="text" id="name" name="name" required placeholder="Enter event name">
+            <input type="text" id="name" name="name" required placeholder="Введите название">
         </div>
 
         <div class="form-group">
             <label for="description">Описание:</label>
-            <textarea id="description" name="description" required placeholder="Enter event description"></textarea>
+            <textarea id="description" name="description" required placeholder="Введите описание"></textarea>
         </div>
 
         <div class="form-group">
             <label for="status">Статус:</label>
-            <input type="text" id="status" name="status" required placeholder="Enter event status">
+            <input type="text" id="status" name="status" required placeholder="Выберите статус ивента">
         </div>
-
         <div class="form-group">
             <label for="startTime">Время начала:</label>
             <input type="datetime-local" id="startTime" name="startTime" required>
@@ -40,14 +39,15 @@
             <input type="datetime-local" id="endTime" name="endTime" required>
         </div>
 
+
         <div class="form-group">
-            <label for="locationId">Id локациия:</label>
-            <input type="number" id="locationId" name="locationId" required placeholder="Enter location ID">
+            <label for="locationId">Id локации:</label>
+            <input type="number" id="locationId" name="locationId" required placeholder="Введите номер локации">
         </div>
 
         <div class="form-group">
             <label for="organizerId">ID организатора:</label>
-            <input type="number" id="organizerId" name="organizerId" required placeholder="Enter organizer ID">
+            <input type="number" id="organizerId" name="organizerId" required placeholder="ID организатора">
         </div>
 
         <div class="form-group">
