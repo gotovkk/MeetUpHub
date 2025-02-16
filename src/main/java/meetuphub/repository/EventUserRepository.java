@@ -12,7 +12,7 @@ public interface EventUserRepository {
     static void addUserToEvent(int eventId, int userId) {
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EVENT_USER)) {
-            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(1, userId)
             preparedStatement.setInt(2, eventId);
             preparedStatement.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now())); // Указываем текущее время
             preparedStatement.setString(4, "registered");
